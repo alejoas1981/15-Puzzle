@@ -240,7 +240,7 @@ export const GameCanvasDom: React.FC<GameCanvasDomProps> = ({
         <div className={`inline-block ${className}`}>
             <div
                 ref={containerRef}
-                className="relative rounded-lg shadow-lg border border-border bg-card"
+                className="relative rounded-lg shadow-lg border border-border game-container '${className}`"
                 style={{
                     width: containerSize,
                     height: containerSize,
@@ -258,15 +258,15 @@ export const GameCanvasDom: React.FC<GameCanvasDomProps> = ({
                         <div
                             key={tileValue}
                             data-tile-value={tileValue}
-                            className="absolute bg-white border-2 border-slate-200 rounded-md shadow-sm cursor-pointer
+                            className="absolute rounded-md shadow-sm cursor-pointer
                        flex items-center justify-center font-bold text-slate-700
-                       hover:bg-slate-50 active:bg-slate-100 select-none transition-transform duration-[180ms] ease-[cubic-bezier(0.2,0.6,0.2,1)]"
+                       hover:bg-slate-50 active:bg-slate-100 select-none transition-transform duration-[180ms] ease-[cubic-bezier(0.2,0.6,0.2,1)] tile"
                             style={{
                                 left: x,
                                 top: y,
                                 width: tileSize,
                                 height: tileSize,
-                                fontSize: Math.max(12, tileSize / 4),
+                                fontSize: Math.max(12, tileSize / 2),
                                 lineHeight: '1',
                             }}
                             onClick={() => handleTileClick(tileValue, index)}
@@ -286,7 +286,7 @@ export const GameCanvasDom: React.FC<GameCanvasDomProps> = ({
 
                     return (
                         <div
-                            className="absolute bg-slate-100 border-2 border-dashed border-slate-300 rounded-md"
+                            className="absolute bg-slate-100 border-2 border-dashed border-slate-300 tile empty"
                             style={{
                                 left: x,
                                 top: y,

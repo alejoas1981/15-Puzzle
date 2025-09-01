@@ -157,4 +157,71 @@ All colors MUST be HSL.
         }
 
     }
+
+    .game-container {
+        background-image: url('/img/light-wood.jpg');
+        background-size: cover;
+        background-position: center;
+        border-radius: 12px;
+        padding: 10px;
+        display: grid;
+        gap: 6px;
+    }
+
+    .tile {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-image: url('img/tile_bg.png'); /* background of tile */
+        background-size: cover;
+        background-position: center;
+        border-radius: 12px;
+        position: relative;
+        cursor: pointer;
+        user-select: none;
+        transition: transform 0.1s ease;
+        font-weight: bold;
+        line-height: 1;
+        font-size: 3em; /* larger number */
+        color: #000000; /* black number */
+    }
+
+    /* Inner concave circle for the number */
+    .tile::before {
+        content: '';
+        position: absolute;
+        width: 70%;   /* size of the concave circle */
+        height: 70%;
+        border-radius: 50%;
+        background: radial-gradient(circle at center, rgba(0,0,0,0.1), rgba(0,0,0,0.25)); /* shadow for concave effect */
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 0;
+    }
+
+    /* Number above the inner circle */
+    .tile > * {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Hover/Active effects */
+    .tile:hover {
+        transform: translateY(-2px);
+    }
+
+    .tile:active {
+        transform: translateY(1px);
+    }
+
+    /* Empty tile */
+    .tile.empty {
+        background: transparent;
+        box-shadow: none;
+        border: none;
+    }
+    .tile.empty::before {
+        content: none;
+    }
 }
