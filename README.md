@@ -4,7 +4,7 @@
 "15 Puzzle" is a classic 2D sliding puzzle game built for the web, supporting both desktop and mobile devices. The game uses WebGL (PixiJS) for smooth tile animations and includes a timer and move counter. Player scores are saved directly in a database; there is no backend server or REST API.
 
 ## Images
-![img.png](img.png)
+![img.png](img.png)  ![img_1.png](img_1.png) ![img_2.png](img_2.png) ![img_3.png](img_3.png)
 
 ## Game URL
 in a process...
