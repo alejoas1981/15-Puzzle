@@ -14,6 +14,7 @@ const Index = () => {
     const {t} = useI18n();
     const [gameSize, setGameSize] = useState(4);
     const [showWinModal, setShowWinModal] = useState(false);
+    const [winHandled, setWinHandled] = useState(false);
     const [showLeaderboard, setShowLeaderboard] = useState(false);
     const [showSizeSelector, setShowSizeSelector] = useState(true);
 
@@ -36,13 +37,15 @@ const Index = () => {
 
     // Show victory modal on win
     useEffect(() => {
-        if (gameState.isWon && !showWinModal) {
-            // Short delay to show victory animation
-            setTimeout(() => {
+        if (gameState.isWon && !winHandled) {
+            const timer = setTimeout(() => {
                 setShowWinModal(true);
+                setWinHandled(true);
             }, 1000);
+
+            return () => clearTimeout(timer);
         }
-    }, [gameState.isWon, showWinModal]);
+    }, [gameState.isWon, winHandled]);
 
     // Tile click handling
     const handleTileClick = useCallback((tileIndex: number) => {

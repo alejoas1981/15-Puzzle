@@ -63,7 +63,7 @@ export const useLeaderboard = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [filters, setFilters] = useState<LeaderboardFilters>({});
 
-    // Загрузка результатов из localStorage
+    // Loading results from localStorage
     const loadScores = useCallback(async () => {
         setIsLoading(true);
         try {
@@ -146,7 +146,7 @@ export const useLeaderboard = () => {
             // Simulating API delay
             await new Promise(resolve => setTimeout(resolve, 1000));
 
-            // Обновляем список результатов
+            // Updating the results list
             await loadScores();
 
             return true;

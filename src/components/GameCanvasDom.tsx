@@ -48,50 +48,38 @@ export const GameCanvasDom: React.FC<GameCanvasDomProps> = ({
 
     // FLIP animation for moving a tile
     const animateTile = useCallback((tileElement: HTMLElement, fromIndex: number, toIndex: number) => {
-        if (isAnimating) return;
-
-        setIsAnimating(true);
-
-        // FLIP Step 1: First - запоминаем начальную позицию
+        // FLIP Step 1: First - текущее положение в пикселях
         const fromPos = getPosition(fromIndex, gameState.size);
+        const toPos = getPosition(toIndex, gameState.size);
         const fromX = fromPos.x * (tileSize + gap);
         const fromY = fromPos.y * (tileSize + gap);
-
-        // FLIP Step 2: Last - получаем конечную позицию после обновления DOM
-        const toPos = getPosition(toIndex, gameState.size);
         const toX = toPos.x * (tileSize + gap);
         const toY = toPos.y * (tileSize + gap);
 
-        // FLIP Step 3: Invert - вычисляем разность
+        // Разность для инверсии
         const deltaX = fromX - toX;
         const deltaY = fromY - toY;
 
-        // Устанавливаем начальный transform
         tileElement.style.willChange = 'transform';
         tileElement.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
 
-        // FLIP Step 4: Play - анимируем к финальному состоянию
         requestAnimationFrame(() => {
             tileElement.style.transition = 'transform 180ms cubic-bezier(0.2, 0.6, 0.2, 1)';
             tileElement.style.transform = 'translate(0, 0)';
 
-            // Завершаем анимацию
             const handleTransitionEnd = () => {
                 tileElement.style.transition = '';
                 tileElement.style.transform = '';
                 tileElement.style.willChange = '';
                 tileElement.removeEventListener('transitionend', handleTransitionEnd);
-                setIsAnimating(false);
             };
 
             tileElement.addEventListener('transitionend', handleTransitionEnd);
 
-            // Fallback timeout
-            setTimeout(() => {
-                handleTransitionEnd();
-            }, 360);
+            // Fallback
+            setTimeout(handleTransitionEnd, 200);
         });
-    }, [gameState.size, tileSize, gap, isAnimating]);
+    }, [gameState.size, tileSize, gap]);
 
     const handleTileClick = useCallback((value: number, currentIndex: number) => {
         if (isAnimating || isDragging) return;
