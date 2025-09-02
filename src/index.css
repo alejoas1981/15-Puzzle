@@ -159,7 +159,7 @@ All colors MUST be HSL.
     }
 
     .game-container {
-        background-image: url('/img/light-wood.jpg');
+        background-image: url('/public/img/light-wood.jpg');
         background-size: cover;
         background-position: center;
         border-radius: 12px;
@@ -172,7 +172,7 @@ All colors MUST be HSL.
         display: flex;
         align-items: center;
         justify-content: center;
-        background-image: url('/img/tile_bg.png'); /* background of tile */
+        background-image: url('/public/img/tile_bg.png'); /* background of tile */
         background-size: cover;
         background-position: center;
         border-radius: 12px;
