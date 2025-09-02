@@ -172,7 +172,7 @@ All colors MUST be HSL.
         display: flex;
         align-items: center;
         justify-content: center;
-        background-image: url('img/tile_bg.png'); /* background of tile */
+        background-image: url('/img/tile_bg.png'); /* background of tile */
         background-size: cover;
         background-position: center;
         border-radius: 12px;
