@@ -1,6 +1,7 @@
-import {useState, useEffect, useCallback} from 'react';
-import {Score, LeaderboardFilters} from '@/types/game';
-import {toast} from 'sonner';
+import { useState, useEffect, useCallback } from 'react';
+import { Score, LeaderboardFilters } from '@/types/game';
+import { toast } from 'sonner';
+import { leaderboardService } from '@/services/leaderboardService';
 
 // Placeholder for demo data
 const DEMO_SCORES: Score[] = [
@@ -14,46 +15,7 @@ const DEMO_SCORES: Score[] = [
         clientId: 'demo1',
         createdAt: new Date('2024-01-20T10:30:00'),
     },
-    {
-        id: '2',
-        name: 'Мария',
-        timeMs: 52180,
-        moves: 95,
-        score: 8234,
-        size: 4,
-        clientId: 'demo2',
-        createdAt: new Date('2024-01-19T15:45:00'),
-    },
-    {
-        id: '3',
-        name: 'Дмитрий',
-        timeMs: 38900,
-        moves: 112,
-        score: 7890,
-        size: 4,
-        clientId: 'demo3',
-        createdAt: new Date('2024-01-18T12:20:00'),
-    },
-    {
-        id: '4',
-        name: 'Анна',
-        timeMs: 65400,
-        moves: 78,
-        score: 7650,
-        size: 3,
-        clientId: 'demo4',
-        createdAt: new Date('2024-01-17T09:15:00'),
-    },
-    {
-        id: '5',
-        name: 'Игорь',
-        timeMs: 78500,
-        moves: 134,
-        score: 6890,
-        size: 4,
-        clientId: 'demo5',
-        createdAt: new Date('2024-01-16T14:30:00'),
-    },
+    // ... other demo scores
 ];
 
 const STORAGE_KEY = 'puzzle_scores';
@@ -63,106 +25,122 @@ export const useLeaderboard = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [filters, setFilters] = useState<LeaderboardFilters>({});
 
-    // Loading results from localStorage
+    // Load scores via MongoDB service
     const loadScores = useCallback(async () => {
         setIsLoading(true);
         try {
-            // Simulate API delay
-            await new Promise(resolve => setTimeout(resolve, 500));
+            // Attempt to load from MongoDB
+            let loadedScores: Score[] = [];
 
-            const savedScores = localStorage.getItem(STORAGE_KEY);
-            let allScores: Score[] = [...DEMO_SCORES];
+            try {
+                loadedScores = await leaderboardService.getScores(filters);
+                console.log('Scores loaded from MongoDB service:', loadedScores.length);
+            } catch (mongoError) {
+                console.warn('MongoDB service failed, using fallback:', mongoError);
 
-            if (savedScores) {
-                const userScores = JSON.parse(savedScores).map((score: any) => ({
-                    ...score,
-                    createdAt: new Date(score.createdAt),
-                }));
-                allScores = [...userScores, ...allScores];
-            }
+                // Fallback to localStorage + demo data
+                const savedScores = localStorage.getItem(STORAGE_KEY);
+                let allScores: Score[] = [...DEMO_SCORES];
 
-            // Applying filters
-            let filteredScores = allScores;
-
-            if (filters.size) {
-                filteredScores = filteredScores.filter(score => score.size === filters.size);
-            }
-
-            if (filters.period) {
-                const now = new Date();
-                let cutoffDate: Date;
-
-                switch (filters.period) {
-                    case 'week':
-                        cutoffDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-                        break;
-                    case 'month':
-                        cutoffDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-                        break;
-                    default:
-                        cutoffDate = new Date(0);
+                if (savedScores) {
+                    const userScores = JSON.parse(savedScores).map((score: any) => ({
+                        ...score,
+                        createdAt: new Date(score.createdAt),
+                    }));
+                    allScores = [...userScores, ...allScores];
                 }
 
-                filteredScores = filteredScores.filter(score =>
-                    new Date(score.createdAt) >= cutoffDate
-                );
+                // Apply filters for fallback
+                let filteredScores = allScores;
+
+                if (filters.size) {
+                    filteredScores = filteredScores.filter(score => score.size === filters.size);
+                }
+
+                if (filters.period) {
+                    const now = new Date();
+                    let cutoffDate: Date;
+
+                    switch (filters.period) {
+                        case 'week':
+                            cutoffDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+                            break;
+                        case 'month':
+                            cutoffDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+                            break;
+                        default:
+                            cutoffDate = new Date(0);
+                    }
+
+                    filteredScores = filteredScores.filter(score =>
+                        new Date(score.createdAt) >= cutoffDate
+                    );
+                }
+
+                // Sort by score descending
+                filteredScores.sort((a, b) => b.score - a.score);
+                filteredScores = filteredScores.slice(0, 50);
+
+                loadedScores = filteredScores;
             }
 
-            // Sort by score (descending)
-            filteredScores.sort((a, b) => b.score - a.score);
-
-            // Limit to top 50
-            filteredScores = filteredScores.slice(0, 50);
-
-            setScores(filteredScores);
+            setScores(loadedScores);
         } catch (error) {
             console.error('Error loading scores:', error);
-            toast.error('Leaderboard loading error');
+            toast.error('Failed to load leaderboard');
         } finally {
             setIsLoading(false);
         }
     }, [filters]);
 
-    // Saving new result
+    // Save new score via MongoDB service
     const saveScore = useCallback(async (newScore: Omit<Score, 'id' | 'createdAt'>): Promise<boolean> => {
         try {
-            const scoreWithId: Score = {
-                ...newScore,
-                id: `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-                createdAt: new Date(),
-            };
+            // Attempt save via MongoDB
+            try {
+                const insertedId = await leaderboardService.saveScore(newScore);
+                console.log('Score saved via MongoDB service:', insertedId);
+                toast.success('Score saved to MongoDB!');
 
-            // Saving to localStorage
-            const savedScores = localStorage.getItem(STORAGE_KEY);
-            const existingScores: Score[] = savedScores ? JSON.parse(savedScores) : [];
+                // Update score list
+                await loadScores();
+                return true;
 
-            const updatedScores = [scoreWithId, ...existingScores];
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedScores));
+            } catch (mongoError) {
+                console.warn('MongoDB save failed, using localStorage fallback:', mongoError);
 
-            // Notification of local save
-            toast.success('Result saved locally!')
-            toast.info('Connect Supabase for persistent cloud storage of results')
+                // Fallback to localStorage
+                const scoreWithId: Score = {
+                    ...newScore,
+                    id: `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+                    createdAt: new Date(),
+                };
 
-            // Simulating API delay
-            await new Promise(resolve => setTimeout(resolve, 1000));
+                const savedScores = localStorage.getItem(STORAGE_KEY);
+                const existingScores: Score[] = savedScores ? JSON.parse(savedScores) : [];
 
-            // Updating the results list
-            await loadScores();
+                const updatedScores = [scoreWithId, ...existingScores];
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedScores));
 
-            return true;
+                toast.success('Score saved locally!');
+                toast.info('Configure MongoDB to save in the cloud');
+
+                await loadScores();
+                return true;
+            }
         } catch (error) {
             console.error('Error saving score:', error);
-            toast.error('Error saving result');
+            toast.error('Failed to save score');
             return false;
         }
     }, [loadScores]);
 
-    // Updating filters
+    // Update filters
     const updateFilters = useCallback((newFilters: LeaderboardFilters) => {
         setFilters(newFilters);
     }, []);
 
-    // Loading on filter change
+    // Load on filters change
     useEffect(() => {
         loadScores();
     }, [loadScores]);
