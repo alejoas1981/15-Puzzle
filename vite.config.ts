@@ -1,15 +1,66 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
+import { VitePWA } from "vite-plugin-pwa";
 
-// https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
     server: {
         host: "::",
         port: 8080,
     },
     plugins: [
-        react()
+        react(),
+        VitePWA({
+            registerType: "autoUpdate",
+            includeAssets: [
+                "favicon.svg",
+                "robots.txt",
+                "apple-touch-icon.png",
+                "android-chrome-192x192.png",
+                "android-chrome-512x512.png"
+            ],
+            manifest: {
+                name: "15 Puzzle – Web Game",
+                short_name: "15 Puzzle",
+                description: "Classic 2D sliding puzzle game built with PixiJS for web, desktop and mobile.",
+                theme_color: "#ffffff",
+                background_color: "#ffffff",
+                display: "standalone",
+                icons: [
+                    {
+                        src: "android-chrome-192x192.png",
+                        sizes: "192x192",
+                        type: "image/png"
+                    },
+                    {
+                        src: "android-chrome-512x512.png",
+                        sizes: "512x512",
+                        type: "image/png"
+                    },
+                    {
+                        src: "apple-touch-icon.png",
+                        sizes: "180x180",
+                        type: "image/png"
+                    }
+                ]
+            },
+            workbox: {
+                globPatterns: ["**/*.{js,css,html,png,svg,mp3}"],
+                runtimeCaching: [
+                    {
+                        urlPattern: /.*\.(png|jpg|jpeg|svg|mp3)$/,
+                        handler: "CacheFirst",
+                        options: {
+                            cacheName: "assets-cache",
+                            expiration: {
+                                maxEntries: 100,
+                                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 дней
+                            },
+                        },
+                    },
+                ],
+            },
+        }),
     ],
     resolve: {
         alias: {
