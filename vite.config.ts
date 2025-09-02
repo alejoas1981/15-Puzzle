@@ -12,6 +12,13 @@ export default defineConfig(({ mode }) => ({
         react(),
         VitePWA({
             registerType: "autoUpdate",
+            includeAssets: [
+                "favicon.svg",
+                "robots.txt",
+                "apple-touch-icon.png",
+                "android-chrome-192x192.png",
+                "android-chrome-512x512.png"
+            ],
             manifest: {
                 name: "15 Puzzle – Web Game",
                 short_name: "15 Puzzle",
@@ -36,8 +43,24 @@ export default defineConfig(({ mode }) => ({
                         type: "image/png"
                     }
                 ]
-            }
-        })
+            },
+            workbox: {
+                globPatterns: ["**/*.{js,css,html,png,svg,mp3}"],
+                runtimeCaching: [
+                    {
+                        urlPattern: /.*\.(png|jpg|jpeg|svg|mp3)$/,
+                        handler: "CacheFirst",
+                        options: {
+                            cacheName: "assets-cache",
+                            expiration: {
+                                maxEntries: 100,
+                                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 дней
+                            },
+                        },
+                    },
+                ],
+            },
+        }),
     ],
     resolve: {
         alias: {
