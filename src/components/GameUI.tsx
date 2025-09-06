@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {Button} from '@/components/ui/button';
 import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
 import {Badge} from '@/components/ui/badge';
@@ -24,6 +24,22 @@ export const GameUI: React.FC<GameUIProps> = ({
                                                   gameSize = gameState.size,
                                               }) => {
     const {t} = useI18n();
+    const [serverConnected, setServerConnected] = useState(true);
+    
+    useEffect(() => {
+        const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+        const checkServer = async () => {
+            try {
+                const response = await fetch(`${API_BASE}/ping`);;
+                if (!response.ok) throw new Error('Ping failed');
+                setServerConnected(true);
+            } catch {
+                setServerConnected(false);
+            }
+        };
+        
+        checkServer();
+    }, []);
 
     const formatTime = (ms: number) => {
         const seconds = Math.floor(ms / 1000);
@@ -171,11 +187,14 @@ export const GameUI: React.FC<GameUIProps> = ({
                             </ul>
                         </CardContent>
                     </Card>
-
+                </div>
+            )}
+            {!serverConnected && (
+                <div className="space-y-4">
                     <Card className="border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-950">
                         <CardHeader>
                             <CardTitle className="text-orange-700 dark:text-orange-300">
-                                💾 {t('demoMode')}
+                                📴 {t('demoMode')}
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="text-orange-600 dark:text-orange-400 text-sm">

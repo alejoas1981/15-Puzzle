@@ -63,8 +63,8 @@ export const translations = {
         footerInorder: "in order",
 
         // Demo mode
-        demoMode: "Demo Mode",
-        demoDescription: "Scores are saved locally. Connect Supabase for cloud storage.",
+        demoMode: "Server not connected",
+        demoDescription: "Scores are saved locally. Cloud leaderboard server not connected.",
 
         // Game status
         pausedMessage: "⏸️ Game Paused",
@@ -138,8 +138,8 @@ export const translations = {
         footerInOrder: "по порядку",
 
         // Demo mode
-        demoMode: "Демо режим",
-        demoDescription: "Результаты сохраняются локально. Подключите Supabase для облачного хранения.",
+        demoMode: "Сервер не подключен",
+        demoDescription: "Результаты сохраняются локально. Не подключено сервер облачного хранения данных (таблица лидеров).",
 
         // Game status
         pausedMessage: "⏸️ Игра на паузе",
@@ -215,8 +215,8 @@ export const translations = {
         footerInOrder: "за порядком",
 
         // Demo mode
-        demoMode: "Демо режим",
-        demoDescription: "Результати зберігаються локально. Підключіть Supabase для хмарного зберігання.",
+        demoMode: "Сервер не підключено",
+        demoDescription: "Результати зберігаються локально. Не підключено сервер хмарного зберігання даних (таблиця лідерів).",
 
         // Game status
         pausedMessage: "⏸️ Гра на паузі",
@@ -288,8 +288,8 @@ export const translations = {
         footerInOrder: "en orden",
 
         // Demo mode
-        demoMode: "Modo Demo",
-        demoDescription: "Las puntuaciones se guardan localmente. Conecta Supabase para almacenamiento en la nube.",
+        demoMode: "Servidor no conectado",
+        demoDescription: "Las puntuaciones se guardan localmente. Servidor de clasificación en la nube no conectado.",
 
         // Game status
         pausedMessage: "⏸️ Juego Pausado",
@@ -361,8 +361,8 @@ export const translations = {
         footerInOrder: "dans l'ordre",
 
         // Demo mode
-        demoMode: "Mode Démo",
-        demoDescription: "Les scores sont sauvegardés localement. Connectez Supabase pour le stockage cloud.",
+        demoMode: "Serveur non connecté",
+        demoDescription: "Les scores sont sauvegardés localement. Serveur de classement cloud non connecté.",
 
         // Game status
         pausedMessage: "⏸️ Jeu en Pause",

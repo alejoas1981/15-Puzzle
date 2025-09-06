@@ -234,16 +234,6 @@ export const GameCanvasDom: React.FC<GameCanvasDomProps> = ({
             API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
         
         if (!gameState.isPaused && !gameState.isWon) {
-            
-            (async () => {
-                try {
-                    await fetch(`${API_BASE}/ping`);
-                    console.log('Ping sent (initial)');
-                } catch (err) {
-                    console.error('Initial ping failed:', err);
-                }
-            })();
-            
             interval = setInterval(async () => {
                 try {
                     await fetch(`${API_BASE}/ping`);
