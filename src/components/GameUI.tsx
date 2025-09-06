@@ -38,7 +38,7 @@ export const GameUI: React.FC<GameUIProps> = ({
 
     return (
         <div className="space-y-4">
-            {/* Статистика игры */}
+            {/* Game statistics */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <Card>
                     <CardHeader className="pb-3">
@@ -83,7 +83,7 @@ export const GameUI: React.FC<GameUIProps> = ({
                 </Card>
             </div>
 
-            {/* Управление игрой */}
+            {/* Control the game */}
             <div className="flex flex-wrap gap-3 justify-center">
                 <Button
                     onClick={onNewGame}
