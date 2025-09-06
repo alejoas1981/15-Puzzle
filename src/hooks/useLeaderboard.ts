@@ -5,7 +5,8 @@ import {toast} from 'sonner';
 const STORAGE_KEY = 'puzzle_scores';
 
 // Use environment variable for API base, fallback to localhost
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+// const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_BASE = 'https://api-15-puzzle.onrender.com';
 
 async function fetchScores(filters: LeaderboardFilters): Promise<Score[]> {
     const params = new URLSearchParams();

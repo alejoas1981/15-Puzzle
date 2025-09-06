@@ -231,7 +231,8 @@ export const GameCanvasDom: React.FC<GameCanvasDomProps> = ({
         container.addEventListener('touchend', handleTouchEnd, {passive: true});
         
         let interval: NodeJS.Timeout | null = null,
-            API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            // API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            API_BASE = 'https://api-15-puzzle.onrender.com';
         
         if (!gameState.isPaused && !gameState.isWon) {
             
