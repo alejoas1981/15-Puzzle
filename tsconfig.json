@@ -9,6 +9,10 @@
     "paths": {
       "@/*": ["./src/*"]
     },
+    "moduleResolution": "nodenext",
+    "module": "esnext",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "noImplicitAny": false,
     "noUnusedParameters": false,
     "skipLibCheck": true,
