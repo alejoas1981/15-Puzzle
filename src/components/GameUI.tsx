@@ -56,7 +56,7 @@ export const GameUI: React.FC<GameUIProps> = ({
         <div className="space-y-4">
             {/* Game statistics */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Card>
+                <Card className="md:col-span-3">
                     <CardHeader className="pb-3">
                         <CardTitle className="flex items-center gap-2 text-sm">
                             <Clock className="h-4 w-4"/>
@@ -64,39 +64,40 @@ export const GameUI: React.FC<GameUIProps> = ({
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold text-primary">
+                        <div className="text-primary font-bold text-[2rem] md:text-[1.5rem] lg:text-[2rem] max-w-full truncate">
                             {formatTime(gameState.timeMs)}
                         </div>
                     </CardContent>
                 </Card>
-
-                <Card>
-                    <CardHeader className="pb-3">
-                        <CardTitle className="flex items-center gap-2 text-sm">
-                            <MousePointer className="h-4 w-4"/>
-                            {t('moves')}
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold text-primary">
-                            {gameState.moves}
-                        </div>
-                    </CardContent>
-                </Card>
-
-                <Card>
-                    <CardHeader className="pb-3">
-                        <CardTitle className="flex items-center gap-2 text-sm">
-                            <Trophy className="h-4 w-4"/>
-                            {t('score')}
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold text-primary">
-                            {score}
-                        </div>
-                    </CardContent>
-                </Card>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:col-span-3">
+                    <Card>
+                        <CardHeader className="pb-3">
+                            <CardTitle className="flex items-center gap-2 text-sm">
+                                <MousePointer className="h-4 w-4"/>
+                                {t('moves')}
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold text-primary">
+                                {gameState.moves}
+                            </div>
+                        </CardContent>
+                    </Card>
+    
+                    <Card>
+                        <CardHeader className="pb-3">
+                            <CardTitle className="flex items-center gap-2 text-sm">
+                                <Trophy className="h-4 w-4"/>
+                                {t('score')}
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold text-primary">
+                                {score}
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
             </div>
 
             {/* Control the game */}
